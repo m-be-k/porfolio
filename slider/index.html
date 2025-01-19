@@ -3,8 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        body{
+            background-color: peachpuff;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .arrow{
+            display: flex;
+            width: 100px;
+            height: 100px;
+            background-repeat:no-repeat;
+            background-position: center center;
+        }
+        .arrow.right{
+            background-image: url("./img/right_arrow.svg");
+        }
+        .arrow.left{
+            background-image: url("./img/left_arrow.svg");
+        }
+        .photo{
+            display: flex;
+            width: 500px;
+            overflow: hidden;
+        }
+        .photo img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+
+    </style>
 </head>
 <body>
+
+<div class="container">
+    <div class = 'arrow left'></div>
+    <div class = 'photo'>
+        <div><img src="img/1.jfif"></div>
+        <div><img src="img/2.jfif"></div>
+        <div><img src="img/3.jfif"></div>
+        <div><img src="img/4.jfif"></div>
+        <div><img src="img/5.jfif"></div>
+    </div>
+    <div class="arrow right"></div>
+</div>
+
 
 </body>
 </html>
