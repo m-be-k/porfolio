@@ -3,59 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-        body{
-            background-color: peachpuff;
-        }
-        .container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .arrow{
-            display: flex;
-            width: 100px;
-            height: 100px;
-            background-repeat:no-repeat;
-            background-position: center center;
-            border: 1px solid gray;
-        }
-        .arrow.right{
-            background-image: url("./img/right_arrow.svg");
-        }
-        .arrow.left{
-            background-image: url("./img/left_arrow.svg");
-        }
-        .photo{
-            display: flex;
-            width: 500px;
-            overflow: hidden;
-        }
-        .photo img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .photo div{
-            width: 150px;
-            height: 150px;
-            border: 1px solid gray;
-        }
-
-
-    </style>
+    <link rel="stylesheet" href="slider.css">
 </head>
 <body>
 
 <div class="container">
     <div class = 'arrow left'></div>
     <div class = 'photo'>
-        <div><img src="img/1.jfif"></div>
-        <div><img src="img/2.jfif"></div>
-        <div><img src="img/3.jfif"></div>
-        <div><img src="img/4.jfif"></div>
-        <div><img src="img/5.jfif"></div>
+        <div class="picture simpl"><img src="img/1.jfif"></div>
+        <div class="picture simpl"><img src="img/2.jfif"></div>
+        <div class="picture main"><img src="img/3.jfif"></div>
+        <div class="picture simpl"><img src="img/4.jfif"></div>
+        <div class="picture simpl"><img src="img/5.jfif"></div>
+        <div class="picture simpl"><img src="img/big.jpg"></div>
     </div>
     <div class="arrow right"></div>
 </div>
