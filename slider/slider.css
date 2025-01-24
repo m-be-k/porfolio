@@ -2,22 +2,25 @@ body{
     background-color: peachpuff;
     /*display:flex;*/
     margin: 0;
-    padding: 0;
+    padding: 50px;
 }
 .container {
     display: flex;
     align-items: center;
-    width: 50%;
-    justify-content: center;
+    justify-content: flex-start;
     height: 100px;
+    border: 1px solid #b0b0b0;
+    width: fit-content;
+    padding: 20px;
+    border-radius: 30px;
 }
 .arrow{
     display: flex;
-    width: 100px;
-    height: 100px;
+    height: inherit;
+    min-width: 30px;
     background-repeat:no-repeat;
     background-position: center center;
-    border: 1px solid gray;
+    /* border: 1px solid gray; */
 }
 .arrow.right{
     background-image: url("./img/right_arrow.svg");
@@ -27,11 +30,9 @@ body{
 }
 .photo{
     display: flex;
-    /*width: 80%;*/
     gap: 10px;
-    margin: 5px;
-    justify-content: center;
-    /*overflow: hidden;*/
+    justify-content: space-between;
+    height: inherit;
 }
 .photo img {
     max-width: 100%;
@@ -43,14 +44,15 @@ body{
 
 .picture {
     display: flex;
-    flex-shrink: 0;
     flex-basis: 15%;
-    /*overflow: hidden;*/
     background: black;
-    height: 100%;
-
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    overflow: hidden;
 }
 .picture.main {
-    height: 250px;
-    width: 250px;
+    height: 125%;
+    position: relative;
+    top: -12.5%;
 }
