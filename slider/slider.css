@@ -8,11 +8,12 @@ body{
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    height: 100px;
+    height: 140px;
     border: 1px solid #b0b0b0;
     width: fit-content;
-    padding: 20px;
+    /*padding: 20px;*/
     border-radius: 30px;
+    gap: 15px;
 }
 .arrow{
     display: flex;
@@ -20,10 +21,20 @@ body{
     min-width: 30px;
     background-repeat:no-repeat;
     background-position: center center;
+    cursor: pointer;
+    background-size: 70%;
+    transform: scale(1);
+    transition:transform 0.3s ease 0s;
+
     /* border: 1px solid gray; */
+}
+.arrow:hover{
+    /*background-size: 100%;*/
+    transform: scale(1.2);
 }
 .arrow.right{
     background-image: url("./img/right_arrow.svg");
+
 }
 .arrow.left{
     background-image: url("./img/left_arrow.svg");
@@ -33,6 +44,10 @@ body{
     gap: 10px;
     justify-content: space-between;
     height: inherit;
+
+
+    height: 140px;
+    align-items: center;
 }
 .photo img {
     max-width: 100%;
@@ -50,9 +65,11 @@ body{
     align-items: center;
     border-radius: 8px;
     overflow: hidden;
+    box-shadow: 5px 7px 20px 0 black;
+    height: 80%;
 }
 .picture.main {
-    height: 125%;
+    height: 90%;
     position: relative;
-    top: -12.5%;
+    /* top: 0.5%; */
 }
