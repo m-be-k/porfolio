@@ -8,25 +8,33 @@ body{
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    height: 140px;
+    height: 200px;
     border: 1px solid #b0b0b0;
     width: fit-content;
     /*padding: 20px;*/
     border-radius: 30px;
-    gap: 15px;
+    /* gap: 15px; */
+}
+.photo-container{
+    width: 516px;
+    overflow: hidden;
+    height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .arrow{
     display: flex;
     height: inherit;
-    min-width: 30px;
+    min-width: 35px;
     background-repeat:no-repeat;
     background-position: center center;
     cursor: pointer;
     background-size: 70%;
     transform: scale(1);
     transition:transform 0.3s ease 0s;
-
     /* border: 1px solid gray; */
+    padding: 10px;
 }
 .arrow:hover{
     /*background-size: 100%;*/
@@ -44,10 +52,15 @@ body{
     gap: 10px;
     justify-content: space-between;
     height: inherit;
-
-
     height: 140px;
     align-items: center;
+    width: 700px;
+    flex-shrink: 0;
+    position: relative;
+    left: 0;
+    left: -102px;
+    /* right: 106px; */
+    transition: 0.3s ease;
 }
 .photo img {
     max-width: 100%;
