@@ -51,7 +51,6 @@ body{
     display: flex;
     gap: 10px;
     justify-content: space-between;
-    height: inherit;
     height: 140px;
     align-items: center;
     width: 700px;
