@@ -46,13 +46,22 @@
             element.append(container);
             container.append(arrowLeft, photoContainer, arrowRight);
             photoContainer.append(photo);
+            arrowLeft.addEventListener('click', ()=> this.moveLeft());
+            arrowRight.addEventListener('click', ()=> this.moveRight());
 
-            /*
-            1) Создание элементов
-            2) Настройка элементов
-            3) Связывание элементов
-            */
+        }
+        moveLeft(){
+            // alert('left');
+            // цикл
+            for(let i=0; i<document.getElementById("photos").style.left.length; i++){
+                document.getElementById("photos").style.left[i]
+            }
+            //  = "-180px";
 
+        }
+        moveRight(){
+            // alert('right');
+            document.getElementById("photos").style.left = "180px";
         }
         loadImages(imagesLinks){
             const elem = document.getElementById("photos");

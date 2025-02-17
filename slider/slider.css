@@ -2,7 +2,7 @@ body{
     background-color: peachpuff;
     /*display:flex;*/
     margin: 0;
-    padding: 50px;
+    padding: 160px;
 }
 .container {
     display: flex;
@@ -49,15 +49,14 @@ body{
 }
 .photo{
     display: flex;
-    gap: 10px;
+    /*gap: 10px;*/
     justify-content: space-between;
-    height: 140px;
+    height: 185px;
     align-items: center;
-    width: 700px;
+    width: 843px;
     flex-shrink: 0;
     position: relative;
-    left: 0;
-    left: -102px;
+    left: 0px;
     /* right: 106px; */
     transition: 0.3s ease;
 }
