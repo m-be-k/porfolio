@@ -11,22 +11,10 @@
 </div>
 
 <script>
-
-
-    /*
-    1. Создать функцию, которая строит слайдер целиком и возвращает контейнер photos наружу
-    2. Переписать createPicture, чтобы внутри него вызывалось создание слайдера, и полученное значение (photos), использовать как контейнер для фотографий
-     */
-
-    /*
-    Написать класс Slider
-        конструктор принимает контейнер и создает внутри него сам слайдер как createSlider
-        добавляем метод loadImages, который примет массив ссылок на картинки и заполнит ими слайдер
-    */
-
     class Slider{
 
         constructor(element){
+
             let container = document.createElement("div");
             container.classList.add('container');
 
@@ -42,27 +30,44 @@
             let photo = document.createElement("div");
             photo.classList.add('photo');
             photo.id = 'photos';
+            photo.style.left = "0px";
 
             element.append(container);
             container.append(arrowLeft, photoContainer, arrowRight);
             photoContainer.append(photo);
+
+
             arrowLeft.addEventListener('click', ()=> this.moveLeft());
             arrowRight.addEventListener('click', ()=> this.moveRight());
 
-        }
-        moveLeft(){
-            // alert('left');
-            // цикл
-            for(let i=0; i<document.getElementById("photos").style.left.length; i++){
-                document.getElementById("photos").style.left[i]
-            }
-            //  = "-180px";
 
         }
-        moveRight(){
-            // alert('right');
-            document.getElementById("photos").style.left = "180px";
+
+        moveLeft(){
+            const photo = document.getElementById('photos');
+            photo.style.transition = 'transform 0.5s ease';
+            photo.style.transform = 'translateX(-200px)';
+
+            setTimeout(() => {
+                photo.style.transition = 'none';
+                photo.style.transform = 'translateX(0px)';
+                photo.appendChild(photo.firstElementChild);
+            }, 500);
         }
+        moveRight(){
+            const photo = document.getElementById('photos');
+            photo.style.transition = 'transform 0.5s ease';
+            photo.style.transform = 'translateX(200px)';
+
+            setTimeout(() => {
+                photo.style.transition = 'none';
+                photo.style.transform = 'translateX(0px)';
+                photo.insertBefore(photo.lastElementChild, photo.firstElementChild);
+            }, 500);
+        }
+
+
+
         loadImages(imagesLinks){
             const elem = document.getElementById("photos");
             for (let i = 0; i < imagesLinks.length; i++) {
@@ -82,11 +87,6 @@
     let val = ["img/big.jpg", "img/1.jfif", "img/2.jfif", "img/3.jfif", "img/5.jfif"];
     slider.loadImages(val);
 
-
-    // нужно правильно вызвать функцию
-    // надо использовать метод который поможет вызвать правильно функцию
-    //let slider = document.getElementById('slider');
-    //createSlider(slider);
 </script>
 
 </body>
