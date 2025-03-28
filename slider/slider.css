@@ -1,6 +1,6 @@
 body{
     background-color: peachpuff;
-    /*display:flex;*/
+
     margin: 0;
     padding: 160px;
 }
@@ -11,9 +11,9 @@ body{
     height: 200px;
     border: 1px solid #b0b0b0;
     width: fit-content;
-    /*padding: 20px;*/
+
     border-radius: 30px;
-    /* gap: 15px; */
+
 }
 .photo-container{
     width: 516px;
@@ -22,6 +22,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+
 }
 .arrow{
     display: flex;
@@ -33,11 +34,11 @@ body{
     background-size: 70%;
     transform: scale(1);
     transition:transform 0.3s ease 0s;
-    /* border: 1px solid gray; */
+
     padding: 10px;
 }
 .arrow:hover{
-    /*background-size: 100%;*/
+
     transform: scale(1.2);
 }
 .arrow.right{
@@ -49,28 +50,26 @@ body{
 }
 .photo{
     display: flex;
-    /*gap: 10px;*/
-    justify-content: space-between;
+    gap: 25px;
     height: 185px;
     align-items: center;
-    width: 843px;
+    /* width: 777px; */
     flex-shrink: 0;
     position: relative;
     left: 0;
-    /* right: 106px; */
     transition: 0.3s ease;
+    justify-content: center;
 }
 .photo img {
     max-width: 100%;
     max-height: 100%;
     display: block;
-    /*overflow: auto;*/
     object-fit: contain;
 }
 
 .picture {
     display: flex;
-    flex-basis: 15%;
+    flex-basis: 150px;
     background: black;
     justify-content: center;
     align-items: center;
@@ -78,9 +77,9 @@ body{
     overflow: hidden;
     box-shadow: 5px 7px 20px 0 black;
     height: 80%;
+    flex-shrink: 0;
+    flex-grow: 0;
 }
 .picture.main {
-    height: 90%;
-    position: relative;
-    /* top: 0.5%; */
+    height: 100%;
 }
