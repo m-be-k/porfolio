@@ -49,7 +49,7 @@
             const photo = document.getElementById('photos');
             photo.style.transition = 'transform 0.5s ease';
             photo.style.transform = `translateX(${this.slideByCount * -175}px)`;
-            this.highMainImg();
+
             setTimeout(() => {
                 photo.style.transition = 'none';
                 photo.style.transform = 'translateX(0px)';
@@ -57,6 +57,7 @@
                 for (let i = 0; i < this.slideByCount; i++) { //Использую цикл, чтобы перенести сразу три элемента
                     photo.append(photo.firstElementChild);
                 }
+                this.highMainImg();
             }, 500);
         }
 
@@ -64,17 +65,15 @@
             const photo = document.getElementById('photos');
             photo.style.transition = 'transform 0.5s ease';
             photo.style.transform = `translateX(${this.slideByCount * 175}px)`;
-            this.highMainImg();
-
             setTimeout(() => {
                 photo.style.transition = 'none';
                 photo.style.transform = 'translateX(0px)';
                 for (let i = 0; i < this.slideByCount; i++) {
                     photo.prepend(photo.lastElementChild);
                 }
+                this.highMainImg();
             }, 500);
         }
-
 
         loadImages(imagesLinks) {
             const elem = document.getElementById("photos");
@@ -82,32 +81,21 @@
                 let cell = document.createElement("div");
                 cell.classList.add('picture', 'simple');
                 elem.append(cell);
-                this.highMainImg();
+
             }
-
-
             const containers = elem.getElementsByClassName('picture');
             for (let i = 0; i < containers.length; i++) {
                 let img = document.createElement('img');
                 img.src = imagesLinks[i % imagesLinks.length];
                 containers[i].append(img)
-                this.highMainImg();
             }
-
+            this.highMainImg();
         }
-
-// добавить метод highMainImg
-        // нужно добавить класс мейн и
-        // нужно сбрасывать класс мейн у всех картинок
-        // mainImageId
-        // добавил класс добавления
-        // и класс удаления картинки
 
         highMainImg() {
             const pictures = document.querySelectorAll(".picture");
-
             pictures.forEach((picture, index) => {
-                if (index === this.mainImageId) {
+                if (index === this.mainImageId + this.slideByCount) {
                     picture.classList.add('main');
                 } else {
                     picture.classList.remove('main');
@@ -118,7 +106,7 @@
 
     }
 
-    let slider = new Slider(document.getElementById('slider'), 5, 2, 1);
+    let slider = new Slider(document.getElementById('slider'), 5, 1, 4);
     let val = ["img/big.jpg", "img/1.jfif", "img/2.jfif", "img/3.jfif", "img/5.jfif"];
     slider.loadImages(val);
 
