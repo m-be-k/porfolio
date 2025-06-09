@@ -3,25 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="slider.css">
-
 </head>
 <body>
 <div id="slider" ></div>
 <div id="slider2" ></div>
-<script src="slider.js"></script>
+<div id="slider3" ></div>
+<div id="slider4" ></div>
+<div id="slider5" ></div>
+<script src="./lib/slider.js"></script>
 
-<script>
+<script >
     const slider = new Slider(document.getElementById('slider'), 5, 1, 1);
-    const images1 = ["img/big.jpg", "img/1.jfif", "img/2.jfif", "img/3.jfif", "img/5.jfif"];
-    slider.loadImages(images1);
+    slider.loadImages(["img/big.jpg", "img/1.jfif", "img/2.jfif", "img/3.jfif", "img/5.jfif"]);
 </script>
 
 <script>
 
-    const slider2 = new Slider(document.getElementById('slider2'), 5, 3, 1);
+    const slider2 = new Slider(document.getElementById('slider2'), 4, 3, 1);
     const images2 = ["img/big.jpg", "img/1.jfif", "img/2.jfif", "img/3.jfif", "img/5.jfif"].reverse();
     slider2.loadImages(images2);
+</script>
+<script>
+
+    const slider3 = new Slider(document.getElementById('slider3'), 4, 3, 1);
+    const images3 = ["img/big.jpg", "img/1.jfif", "img/2.jfif", "img/3.jfif", "img/5.jfif"].reverse();
+    slider3.loadImages(images3);
+</script>
+<script>
+
+    const slider4 = new Slider(document.getElementById('slider4'), 4, 3, 1);
+    const images4 = ["img/big.jpg", "img/1.jfif", "img/2.jfif", "img/3.jfif", "img/5.jfif"].reverse();
+    slider4.loadImages(images4);
+</script>
+<script>
+
+    const slider5 = new Slider(document.getElementById('slider5'), 4, 3, 1);
+    const images5 = ["img/big.jpg", "img/1.jfif", "img/2.jfif", "img/3.jfif", "img/5.jfif"].reverse();
+    slider5.loadImages(images5);
 </script>
 </body>
 </html>
