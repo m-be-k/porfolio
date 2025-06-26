@@ -1,0 +1,69 @@
+body {
+    display: flex;
+    justify-content: center;
+    max-height: 100vh;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.move-time, .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#move, #time, #leaderboard, #language, .controls button {
+    background: #008cba;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#move:hover, #time:hover, #leaderboard:hover, #language:hover, .controls button:hover {
+    background: #6daecc;
+    transform: scale(1.05);
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    grid-template-rows: repeat(4, auto);
+    gap: 5px;
+    width: clamp(240px, 90vw, 400px);
+    height: clamp(240px, 90vw, 400px);
+    padding: 5px;
+    margin: 20px;
+    background: #ffffff;
+    border-radius: 15px;
+    border: 2px solid black;
+
+}
+
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #a5cee7;
+}
+
+.box:empty {
+    display: none;
+
+}
+
+.controls {
+    display: flex;
+    justify-content: space-around;
+}
+.controls button {
+    height: clamp(30px, 6vh, 50px);
+}
