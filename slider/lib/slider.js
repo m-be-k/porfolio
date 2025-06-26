@@ -1,9 +1,11 @@
-class Slider {
+self.Slider = class Slider  {
     static sliderCounter = 0;
     static sliderPromise = new Promise((resolve, reject) => {
         const style = document.createElement('link');
+        const url =new URL("slider.css", import.meta.url);
         style.rel = 'stylesheet';
-        style.href = 'slider.css';
+        style.href = url.href;
+
         style.onload = function () {
             resolve();
         }
