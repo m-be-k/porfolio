@@ -8,42 +8,50 @@ body {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    /* width: clamp(205px, 6vmin, 160px); */
+    height: clamp(43px, 3vmin, 59px);
 }
 
 .move-time, .menu {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: row;
+    gap: 5px;
+    /* width: clamp(139px, 3vmin, 150px); */
+    height: clamp(29px, 2vmin, 51px);
+    align-items: center;
 }
 
-#move, #time, #leaderboard, #language, .controls button {
+#move, #time, #leaderboard, #language, #language option, .controls button {
     background: #008cba;
-    padding: 10px;
+    padding: 6px;
     border-radius: 5px;
     color: white;
     text-align: center;
     cursor: pointer;
-    transition: 0.3s;
+
 }
 
 #move:hover, #time:hover, #leaderboard:hover, #language:hover, .controls button:hover {
     background: #6daecc;
-    transform: scale(1.05);
+    /* transform: scale(2.05); */
 }
-
-.board {
-    display: grid;
-    grid-template-columns: repeat(4, auto);
-    grid-template-rows: repeat(4, auto);
-    gap: 5px;
-    width: clamp(240px, 90vw, 400px);
-    height: clamp(240px, 90vw, 400px);
-    padding: 5px;
-    margin: 20px;
+.game-content {
+    width: clamp(240px, 50vmin, 400px);
+    aspect-ratio: 1;
+    padding: 2px;
+    margin: 10px;
     background: #ffffff;
     border-radius: 15px;
     border: 2px solid black;
 
+}
+.board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 5px;
+    width: 100%;
+    height: 100%;
 }
 
 .box {
@@ -53,17 +61,23 @@ body {
     border: 1px solid black;
     border-radius: 10px;
     background-color: #a5cee7;
+    font-size: clamp(25px, 5vmin, 40px);
 }
 
 .box:empty {
-    display: none;
-
+    /*!important;*/
+    visibility: hidden;
 }
 
 .controls {
     display: flex;
     justify-content: space-around;
+    text-align: center;
+    width: 100%;
+
 }
 .controls button {
-    height: clamp(30px, 6vh, 50px);
+    height: clamp(30px, 5vh, 50px);
+    width: 30%;
+    font-size: clamp(10px, 4vmin, 20px);
 }
