@@ -1,96 +1,102 @@
-import {GameScreen} from "./screens/gameScreen.js";
-import {TestScreen} from "./screens/screen2.js";
+import {GameScreen} from "./screens/GameScreen.js";
+import {MainScreen} from "./screens/MainScreen.js";
+import {Timer} from './helpers/timer.js';
+
+const gameStateEnum = {
+    stopped: 0,
+    paused: 1,
+    active: 2,
+}
 
 class FifteenGame {
-    // Добавить селекторы: доска, стар, выход, время, движение.
-    // Состояние,
+
     constructor(x, y, z) {
         this.gameContent = document.querySelector(".game-content");
         this.cellsCount = 16;
-        this.gameScreen = new GameScreen(this);
-        this.gameScreen.show();
+        this.screens = {
+            gameScreen: new GameScreen(this),
+            mainScreen: new MainScreen(this),
+        };
+        this.screens.mainScreen.show();
 
-        setTimeout(()=>{
-            (new TestScreen(this)).show();
-        }, 5000);
+        this.state = {
+            gameProcess: gameStateEnum.stopped, // stopped | paused | active
+        };
+
+        this.moveCount = 0;
+        this.time = 0;
+        this.moveDisplay = document.getElementById('move');
+        this.timeDisplay = document.getElementById('time');
+        this.timer = new Timer((ms) => {
+            // рассчитать время с момента запуска.
+            const time = new Date(ms);
+            const hours = time.getUTCHours().toString().padStart(2, "0");
+            const minutes = time.getUTCMinutes().toString().padStart(2, "0");
+            const seconds = time.getUTCSeconds().toString().padStart(2, "0");
+            this.timeDisplay.textContent = `Время: ${hours}:${minutes}:${seconds}`;
+            this.time = time;
+        }, 1000, 50);
+
+        // this.timer.start();
+
+        // подключить кнопки управление Стар и выход
+        // можно подключиться через елемент айдишника
+
+        /*
+        1) Переименование кнопки в зависимости от состояния
+        2) После возобновления игры счетчик ходов не должен сбрасываться
+        3) Поле должно фризиться и не позволять делать ходы
+
+         */
+        this.startButton = document.getElementById('start');
+        this.startButton.addEventListener('click', () => {
+
+
+            if (this.state.gameProcess === gameStateEnum.active) {
+                this.timer.pause();
+                this.state.gameProcess = gameStateEnum.paused;
+                this.startButton.textContent = 'Старт';
+            } else {
+                this.startGame();
+                this.startButton.textContent = 'Пауза';
+// что бы сохранить ходы и не сбрасывались ходы после паузы.
+                //
+            }
+        });
+    }
+
+
+    // нужно реализовать стар и пауза одной кнопкой
+    // для это мне надо обратиться в state.
+    // переход со стартового экрана в игровое поле
+    startGame(reset = false){
+        // this.timer.pause()
+        this.screens.gameScreen.show();
+        this.timer.start();
+        this.state.gameProcess = gameStateEnum.active;
+    }
+    // поставить на паузу и остановить таймер
+    // когда запускаем игру должно быть что таймер остановился и стате долже быть на паузе
+    // то есть если стате будет, активен то он должен быть на паузе.
+    // startPause(){
+    //     if (this.state.gameProcess === gameStateEnum.active){
+    //         this.s;
+    //     }
+    // }
+    // stopTimer(){
+    //     this.stopTimer()
+    // }
+    renderMoveCount() {
+        this.moveCount++;
+
+        if (this.moveDisplay) {
+            this.moveDisplay.textContent = `ход: ${this.moveCount}`;
+        }
+
     }
 
 }
 
 const gameObject = new FifteenGame();
-//---------------------------------------------------------------------------------------------------
-// // Функция для кнопки SWAP
-//     function onSwapClick() {
-//     if (selected.length !== 2) {
-//         return selected;
-//     }
-//     const [first, second] = selected;
-//     // Деструктуризация массива selected
-//     const container = document.getElementById('container');
-//     //Получение контейнера с блоками по его id, перестановки будут происходить внутри него.
-//
-//     const placeholder = document.createElement('div');
-//     //Создание пустого дива
-//     placeholder.style.display = 'none';
-//     // и делаем его невидимым
-//     container.insertBefore(placeholder, first);
-//     //Помещаем невидимый плейсхолдер на место first.
-//     container.insertBefore(first, second);
-//     //Перемещение первого блока на место второго
-//     // first вставляется сразу перед тем, что раньше был second
-//     //  Плейсхолдер остаётся на старом месте first, а second смещён
-//     container.insertBefore(second, placeholder);
-// //second перед плейсхолдером, то есть на исходное место first.
-//     container.removeChild(placeholder);
-//     //Удаление плейсхолдера
-//     clearSelection();
 
-
-//     swapByID(idA,idB){
-//         // принимаем две строки элементов
-//         const cellA = document.getElementById(idA);
-//         const cellB = document.getElementById(idB);
-//         // проверка, что есть такие элементы.
-//         if(!cellA||!cellB){
-//             return cellA||cellB;
-//         }
-//         // обмен индекса
-//         [cellA.dataset.idx, cellB.dataset.idx] =  [cellA.dataset.idx, cellB.dataset.idx];
-//         // обмен текста
-//         [cellA.textContent, cellB.textContent] = [cellA.textContent, cellB.textContent];
-// const game = new FifteenGame();
-// game.swapByID('cell-15','cell-16');
-// }
-
-// метод по айди
-// переменная cellА и cellB, нужно поменять их по айдишнику местами
-// для это мне нужно обращаться к айди 1-16.
-//
-
-
-//         const cell = e.target;
-//         cell.classList.add("box");
-//         const empty =this.board.querySelectorAll(".box");
-// // const
-
-
-// сделать клетки подвижными
-// При нажатьях на клетку которая рассоложена рядом с пустой клеткой, должна меняться.
-//
-//----------------------------
-// у каждой клетки есть id.
-// проверяю является клетка рядом с пустой клеткой.
-//
-// при клике на любую ячейку проверяю, является ли она пустая.
-// если все пункты верны то меняем местами.
-
-
-// let arr = [1,2,3,4,5,6,7,8,9];
-//
-//
-// arr.sort(()=>{
-//     return Math.random()-0.5;
-// });
-//
-// console.log(arr);
 

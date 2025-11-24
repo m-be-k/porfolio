@@ -1,13 +1,9 @@
-import {Screen} from './screen.js';
-export class GameScreen extends Screen {
-// весь процесс игры внутри пятнашек, использовать в новом классе.
-    // Для того чтобы перенести весть процесс контента игры в класс GameScreem.
-    // То есть методы, которые использовали в FifteenGame (CreateBox/IsSwapPossible/victoryDetect/swapElements)
-    // Нужно, что бы this.gameScreen = new FifteenGame(this)/ смогли использовать в classe GameScreen.
+import {Screen} from './Screen.js';
 
+export class GameScreen extends Screen {
     constructor(gameObject) {
         super(gameObject);
-        this.oneClick();
+        this.setupEventListeners();
         this.createBox();
     }
 
@@ -46,9 +42,7 @@ export class GameScreen extends Screen {
         })
     }
 
-    // обработка клика по плитке.
-
-    oneClick() {
+    setupEventListeners() {
         this.board.addEventListener("click", this.clickHandler.bind(this));
     }
 
@@ -107,16 +101,14 @@ export class GameScreen extends Screen {
 
     }
 
-    // Обработка клика: если это не пустая плитка — меняем с пустой
     clickHandler(e) {
         const clicked = e.target;
-
 
         const empty = this.board.querySelector("#cell-16");
 
         if (this.isSwapPossible(clicked, empty)) {
-
             this.swapElements(clicked, empty);
+            this.gameObject.renderMoveCount();
             if (this.victoryDetect()) {
                 setTimeout(() => {
                     alert("WON");
