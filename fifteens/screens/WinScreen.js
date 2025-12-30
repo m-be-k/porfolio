@@ -23,6 +23,7 @@ export class WinScreen extends Screen {
     show(){
         this.updateResult();
         super.show();
+        // здсесь надо добавить.
     }
 
 
