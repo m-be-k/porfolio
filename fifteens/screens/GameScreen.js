@@ -1,6 +1,15 @@
 import {Screen} from './Screen.js';
+import {gameStateEnum} from "../helpers/enums.js";
+
+/*
+Нужно сделать механизм постановки игрового поля на паузу (и снятия с нее) по запросу:
+   -навешивание плашки
+   -блокировку фишек (чтобы нельзя было на паузе играть)
+ */
 
 export class GameScreen extends Screen {
+    cell;
+
     constructor(gameObject) {
         super(gameObject);
         this.setupEventListeners();
@@ -8,12 +17,16 @@ export class GameScreen extends Screen {
     }
 
     createBox() {
+        // теперь очищаем доску методом
+        this.resetBox();
+
         const arr = [];
         for (let i = 1; i < this.gameObject.cellsCount; i++) {
             arr.push(i);
         }
         // arr.sort(() => Math.random() - 0.5);
         arr.push(this.gameObject.cellsCount);
+
         arr.forEach((num, index) => {
             const cell = document.createElement("div");
             cell.classList.add("box");
@@ -39,7 +52,27 @@ export class GameScreen extends Screen {
             }
             // cell.textContent = `${row}/${col}`;
             this.board.append(cell);
-        })
+        });
+        this.createPausedBoard();
+    }
+
+
+    resetBox() {
+
+        /*
+        Удаление старых плиток:
+            - Очищение доску перед созданием новых плиток.
+         Мне нужно сделать через цикл
+         вывести доску и удалить все родительские элементы
+     так наш борд не являться массивом нужно его сохранить как массив
+    через оператор spread
+         */
+
+        [...this.board.children].forEach((cell) => {
+            cell.remove();
+        });
+
+
     }
 
     setupEventListeners() {
@@ -98,22 +131,34 @@ export class GameScreen extends Screen {
         // 3. поиск плитки
         // 4. если все плитки на месте то возвращаем тру.
         // Если все совпадает вызвать метод.
-
+// мне надо вызвать
     }
 
     clickHandler(e) {
-        const clicked = e.target;
+        if (this.gameObject.state.gameProcess !== gameStateEnum.active) {
+            return;
+        }
 
+        const clicked = e.target;
         const empty = this.board.querySelector("#cell-16");
 
         if (this.isSwapPossible(clicked, empty)) {
             this.swapElements(clicked, empty);
             this.gameObject.renderMoveCount();
             if (this.victoryDetect()) {
-                setTimeout(() => {
-                    alert("WON");
-                }, 0);
+                this.gameObject.victoryProcessing();
 
+
+                // остановить время.
+                // остановить ходы.
+                // Меняем состояние.
+                // поменять экран.
+                // setTimeout(() => {
+                //     alert("WON");
+                // }, 0);
+                // обратиться через геймобжект к стейту и процессу игры и переключить его на победу.
+                // так же остановить таймер то есть поставить на стоп.
+                //
             }
         }
 
@@ -135,4 +180,65 @@ export class GameScreen extends Screen {
         second.dataset.row = typeRow;
         second.dataset.col = typeCol;
     }
+
+    // Создание вида доски.
+// Создаю переменную и назначаем элемент див.
+    // Присваиваю класс pause-ribbon.
+    // Даю ему название (Игра на паузе)
+    // добавляю борд в мой див так что бы вставлял внутри игровой доски
+
+    createPausedBoard() {
+        const pause = document.createElement("div");
+        pause.classList.add("pause-ribbon");
+        pause.textContent = "Игра на паузе";
+        this.board.append(pause);
+    }
+
+// Переключение
+    // Переменная где храниться наш игровой процесс (пауза, остановка)
+    // и делаю условие, если игра запущена активна, то пауза удаляться
+    //
+    stateProcessing() {
+
+        const state = this.gameObject.state.gameProcess;
+        const start = document.getElementById('start');
+
+        switch (state) {
+            case gameStateEnum.active: {
+                this.board.classList.remove('paused');
+                if (start) {
+                    start.textContent = 'Пауза';
+                }
+                break;
+            }
+            case gameStateEnum.stopped: {
+                this.board.classList.add('paused');
+                if (start) {
+                    start.textContent = 'Старт';
+                }
+                this.createBox();
+                break;
+            }
+            case gameStateEnum.winner: {
+                if(start) {
+                    start.textContent = 'Заново';
+                }
+                break;
+            }
+            default: {
+                this.board.classList.add('paused');
+                if (start) {
+                    start.textContent = 'Старт';
+                }
+            }
+        }
+    }
+
 }
+
+// Плашка для игрового борда
+// css мы должны обратиться к борду - пауза. Визуал
+// 1. визуальная блокировка поля.
+// в html добавить div - pause bord
+// так же GameScreen добавить метод в котором опишу детали создания паузы для борда.
+//

@@ -20,6 +20,10 @@ export class Screen {
         // this.gameObject.gameContent.lastChild?.remove();
         this.gameObject.gameContent.append(this.board);
     }
+
+    stateProcessing(){
+
+    }
 }
 // нужно исправить, что бы борды не добавлялись в общий эран.
 // либо удалять

@@ -36,6 +36,7 @@ body {
     /* transform: scale(2.05); */
 }
 .game-content {
+    position: relative;
     width: clamp(240px, 50vmin, 400px);
     aspect-ratio: 1;
     padding: 2px;
@@ -43,9 +44,10 @@ body {
     background: #ffffff;
     border-radius: 15px;
     border: 2px solid black;
-
+    overflow: hidden;
 }
 .board {
+    position: absolute;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
@@ -53,7 +55,43 @@ body {
     width: 100%;
     height: 100%;
 }
+.pause-ribbon {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 180%;
+    transform: translate(-50%, -50%) rotate(-25deg);
+    background: #bd2020;
+    color: #fff;
+    text-align: center;
+    font-weight: 700;
+    font-size: clamp(16px, 4vmin, 28px);
+    padding: 12px 0;
+    z-index: 10;
+    pointer-events: none;
+    user-select: none;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    opacity: 0;
+    transition: opacity 180ms ease;
+    cursor: pointer;
+}
 
+.board.paused .pause-ribbon { display: block; opacity: 1; }
+
+
+.text {
+    display: flex;
+    text-align: center;
+    background: #bd2020;
+    width: inherit;
+    height: inherit;
+    border: 2px solid black;
+
+
+}
 .box {
     display: flex;
     align-items: center;
@@ -62,6 +100,11 @@ body {
     border-radius: 10px;
     background-color: #a5cee7;
     font-size: clamp(25px, 5vmin, 40px);
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+    outline: none;
+
 }
 
 .box:empty {
