@@ -124,3 +124,70 @@ body {
     width: 30%;
     font-size: clamp(10px, 4vmin, 20px);
 }
+.win-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.win-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: inherit;
+    height: inherit;
+}
+
+.win-title {
+    color: #27ae60;
+    margin: 0 0 10px 0;
+}
+
+.win-player {
+    font-size: 1.2rem;
+    color: #34495e;
+}
+
+.win-stats {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    margin: 5px 0;
+    padding: 10px 0;
+    color: #7f8c8d;
+}
+
+.win-score-badge {
+    background: #2c3e50;
+    color: #f1c40f;
+    padding: 5px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.score-num {
+    font-size: 2rem;
+    font-weight: bold;
+}
+.win-player-name {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.send-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    width: 100%;
+}
+
+
