@@ -37,9 +37,9 @@ body {
 }
 .game-content {
     position: relative;
-    width: clamp(240px, 50vmin, 400px);
+    width: clamp(240px, 80vmin, 400px);
     aspect-ratio: 1;
-    padding: 2px;
+    /* padding: 0px; */
     margin: 10px;
     background: #ffffff;
     border-radius: 15px;
@@ -189,5 +189,43 @@ body {
     margin-top: 15px;
     width: 100%;
 }
+.ul{
 
+    white-space: wrap;
+
+}
+.leader-list{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    gap: 5px;
+    flex-direction: column;
+    flex-shrink: 0;
+    white-space: wrap;
+    overflow: hidden;
+}
+.mainScreen {
+    display: flex;
+    flex-direction: column;
+    background-color: #a5cee766;
+    width: 100%;
+    height: 100%;
+    border-radius: 13px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.mainScreen div {
+    width: 90%;
+    text-align: center;
+    font-size: clamp(24px, 8vmin, 50px);
+    font-weight: bold;
+    color: #008cba;
+    text-transform: uppercase;
+    word-wrap: break-word;
+}
 

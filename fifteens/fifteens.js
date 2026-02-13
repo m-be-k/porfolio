@@ -3,6 +3,7 @@ import {MainScreen} from "./screens/MainScreen.js";
 import {Timer} from './helpers/timer.js';
 import {gameStateEnum} from "./helpers/enums.js";
 import {WinScreen} from "./screens/WinScreen.js";
+import {LeaderBoard} from "./screens/LeaderBoard.js";
 
 class FifteenGame {
 
@@ -14,6 +15,7 @@ class FifteenGame {
             gameScreen: new GameScreen(this),
             mainScreen: new MainScreen(this),
             winScreen: new WinScreen(this),
+            leaderBoard: new LeaderBoard(this),
         };
         this.screens.mainScreen.show();
 
@@ -31,7 +33,13 @@ class FifteenGame {
         };
         // нужно раздать State всем кто подписался на событие, в котором выполниться наше условие.
         //
+        this.leaderboardButton = document.getElementById('leaderboard');
 
+        if (this.leaderboardButton) {
+            this.leaderboardButton.addEventListener('click', () => {
+                this.leaderButton();
+            });
+        }
 
         this.moveCount = 0;
         this.time = 0;
@@ -136,6 +144,10 @@ class FifteenGame {
         this.screens.winScreen.show();
     }
 
+    leaderButton() {
+        this.screens.leaderBoard.show();
+
+    }
 }
 
 const gameObject = new FifteenGame();

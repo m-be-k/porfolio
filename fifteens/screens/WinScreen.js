@@ -2,12 +2,15 @@ import {Screen} from "./Screen.js";
 
 export class WinScreen extends Screen {
     playerName;
+
     constructor(gameObject) {
         super(gameObject);
     }
 
 
     show(){
+
+
         // Нужно данные для отоброжения.
         // создать структуру с 0
         // Подгатовка данные для отоброжения
@@ -66,8 +69,43 @@ export class WinScreen extends Screen {
         sendBtn.textContent = "Отправить";
         sendBtn.classList.add("win-send-btn");
 
+        sendBtn.onclick = ()=>{
+            const name = nameInput.value;
+            fetch('http://localhost:3000/api/add_player', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name, scores: score})
+            })
+                // нужно сделать проверку на сервера
+                // Что бы соединял между сервером и кодом.
+                // Что бы получить ответ от сервера.
+                // Нужно сделать проверку response.
+
+                // Тут у нас обработка ответ сервера.
+                // Нужно проверить сервер , что с
+                .then(async response => {
+                    sendSection.replaceChildren();
+                    const message = document.createElement('p');
+                    const data = await response.json();
+                    console.log(data);
+                    if (data.message === 'Player added successfully'){
+                        message.textContent = 'Вы в победителях: ' + name;
+                        message.classList.add('win-message');
+                    }else{
+                        message.textContent = 'Вы не попали в топ 15 :(';
+                    }
+                    sendSection.append(message);
+
+                })
+
+                .catch(error => console.error('Error:', error));
+        };
+        sendSection.append(nameInput, sendBtn);
+
         // Собираем всё вместе
-        winCard.append(title, nameText, statsContainer,scoreBadge,nameInput,sendBtn);
+        winCard.append(title, nameText, statsContainer,scoreBadge,sendSection);
         this.board.append(winCard);
         // вызываем
         super.show();
