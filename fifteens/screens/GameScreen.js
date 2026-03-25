@@ -1,5 +1,8 @@
 import {Screen} from './Screen.js';
 import {gameStateEnum} from "../helpers/enums.js";
+import local from "../locals/local.js";
+
+const {againInGame, startInGame, gameForPause, pausedInGame} = local;
 
 /*
 Нужно сделать механизм постановки игрового поля на паузу (и снятия с нее) по запросу:
@@ -24,7 +27,7 @@ export class GameScreen extends Screen {
         for (let i = 1; i < this.gameObject.cellsCount; i++) {
             arr.push(i);
         }
-        // arr.sort(() => Math.random() - 0.5);
+        arr.sort(() => Math.random() - 0.5);
         arr.push(this.gameObject.cellsCount);
 
         arr.forEach((num, index) => {
@@ -190,7 +193,7 @@ export class GameScreen extends Screen {
     createPausedBoard() {
         const pause = document.createElement("div");
         pause.classList.add("pause-ribbon");
-        pause.textContent = "Игра на паузе";
+        pause.textContent = gameForPause;
         this.board.append(pause);
     }
 
@@ -207,28 +210,28 @@ export class GameScreen extends Screen {
             case gameStateEnum.active: {
                 this.board.classList.remove('paused');
                 if (start) {
-                    start.textContent = 'Пауза';
+                    start.textContent = pausedInGame;
                 }
                 break;
             }
             case gameStateEnum.stopped: {
                 this.board.classList.add('paused');
                 if (start) {
-                    start.textContent = 'Старт';
+                    start.textContent = startInGame;
                 }
                 this.createBox();
                 break;
             }
             case gameStateEnum.winner: {
-                if(start) {
-                    start.textContent = 'Заново';
+                if (start) {
+                    start.textContent = againInGame;
                 }
                 break;
             }
             default: {
                 this.board.classList.add('paused');
                 if (start) {
-                    start.textContent = 'Старт';
+                    start.textContent = startInGame;
                 }
             }
         }

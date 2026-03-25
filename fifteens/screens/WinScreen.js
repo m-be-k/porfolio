@@ -1,4 +1,6 @@
 import {Screen} from "./Screen.js";
+import local from "../locals/local.js";
+const {player, gameScore, yourName, send, youWinner, loseGame} = local;
 
 export class WinScreen extends Screen {
     playerName;
@@ -8,14 +10,13 @@ export class WinScreen extends Screen {
     }
 
 
-    show(){
-
+    show() {
 
         // Нужно данные для отоброжения.
         // создать структуру с 0
         // Подгатовка данные для отоброжения
         const moves = this.gameObject.moveCount;
-        const name = this.gameObject.playerName || "Игрок";
+        const name = this.gameObject.playerName || player;
         const timeStr = this.gameObject.timeDisplay.textContent;
 
         // Считаем очки 10000 базовых - штраф за ходы - штраф за время
@@ -51,7 +52,7 @@ export class WinScreen extends Screen {
         const scoreBadge = document.createElement('div');
         scoreBadge.classList.add('win-score-badge');
         const scoreLabel = document.createElement('small');
-        scoreLabel.textContent = 'ИТОГОВЫЙ СЧЕТ';
+        scoreLabel.textContent = gameScore;
         const scoreValue = document.createElement('div');
         scoreValue.classList.add('score-num');
         scoreValue.textContent = score.toLocaleString();
@@ -62,21 +63,21 @@ export class WinScreen extends Screen {
 
         const nameInput = document.createElement("input");
         nameInput.type = "text";
-        nameInput.placeholder = "Твое имя...";
+        nameInput.placeholder = yourName;
         nameInput.classList.add("win-input");
 
         const sendBtn = document.createElement("button");
-        sendBtn.textContent = "Отправить";
+        sendBtn.textContent = send;
         sendBtn.classList.add("win-send-btn");
 
-        sendBtn.onclick = ()=>{
+        sendBtn.onclick = () => {
             const name = nameInput.value;
             fetch('http://localhost:3000/api/add_player', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name: name, scores: score})
+                body: JSON.stringify({name: name, scores: score})
             })
                 // нужно сделать проверку на сервера
                 // Что бы соединял между сервером и кодом.
@@ -90,11 +91,11 @@ export class WinScreen extends Screen {
                     const message = document.createElement('p');
                     const data = await response.json();
                     console.log(data);
-                    if (data.message === 'Player added successfully'){
-                        message.textContent = 'Вы в победителях: ' + name;
+                    if (data.message === 'Player added successfully') {
+                        message.textContent = youWinner + name;
                         message.classList.add('win-message');
-                    }else{
-                        message.textContent = 'Вы не попали в топ 15 :(';
+                    } else {
+                        message.textContent = loseGame;
                     }
                     sendSection.append(message);
 
@@ -105,12 +106,11 @@ export class WinScreen extends Screen {
         sendSection.append(nameInput, sendBtn);
 
         // Собираем всё вместе
-        winCard.append(title, nameText, statsContainer,scoreBadge,sendSection);
+        winCard.append(title, nameText, statsContainer, scoreBadge, sendSection);
         this.board.append(winCard);
         // вызываем
         super.show();
     }
-
 
 
     // Если меньше очков, тем лучше.

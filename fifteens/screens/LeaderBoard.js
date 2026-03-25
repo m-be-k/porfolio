@@ -3,6 +3,9 @@
 // импортировать экран
 // подключить кнопку лидеров.
 import {Screen} from "./Screen.js";
+import local from "../locals/local.js";
+
+const {topGamers, gamerInList, scoreInList} = local;
 
 export class LeaderBoard extends Screen {
     playerName;
@@ -12,6 +15,7 @@ export class LeaderBoard extends Screen {
     }
 
     show() {
+
         // для нового борда мне нужно очистить родительский элемент
         // и добавить элементы в борд
 
@@ -19,7 +23,7 @@ export class LeaderBoard extends Screen {
         this.board.className = "leaderboard-wrapper";
 // создаю заголовок для борда
         const title = document.createElement("h2");
-        title.textContent = "ТОП ИГРОКОВ";
+        title.textContent = topGamers;
         this.board.append(title);
         // список лидеров
         const list = document.createElement("div");
@@ -36,7 +40,7 @@ export class LeaderBoard extends Screen {
                     const li = document.createElement("li");
                     const playerName = player.name;
                     const playerPoints = player.scores;
-                    li.textContent = `Игрок: ${playerName} - Очки: ${playerPoints}`;
+                    li.textContent = `${gamerInList} ${playerName} - ${scoreInList} ${playerPoints}`;
 
                     playerList.append(li);
                 }
