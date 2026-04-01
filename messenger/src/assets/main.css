@@ -1,10 +1,19 @@
 @import './base.css';
 
+* {
+  border-radius: 10px;
+  color: #474747;
+  outline: none;
+}
+
+button, input{
+  border:1px solid darkgray;
+}
+
 #app {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   font-weight: normal;
+  min-height: inherit;
 }
 
 a,
@@ -23,13 +32,8 @@ a,
 
 @media (min-width: 1024px) {
   body {
-    display: flex;
-    place-items: center;
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
   }
 }
