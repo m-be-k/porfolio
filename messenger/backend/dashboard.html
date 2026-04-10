@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <title>Messenger API Dashboard</title>
+  <style>
+    body { font-family: sans-serif; background: #f5f5f5; margin: 0; padding: 16px; }
+    h1 { margin-top: 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
+    .card { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .card h2 { margin: 0 0 8px; font-size: 16px; }
+    label { display: block; font-size: 13px; margin: 6px 0 2px; color: #333; }
+    input, textarea { width: 100%; padding: 6px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-family: monospace; }
+    textarea { min-height: 60px; }
+    button { margin-top: 8px; padding: 8px 10px; border: none; border-radius: 4px; background: #222; color: white; cursor: pointer; }
+    pre { background: #111; color: #0f0; padding: 8px; border-radius: 4px; overflow: auto; font-size: 12px; }
+    .row { display: flex; gap: 6px; }
+    .row > div { flex: 1; }
+  </style>
+</head>
+<body>
+  <h1>Messenger API Dashboard</h1>
+  <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+    <strong>Backend base URL:</strong>
+    <input id="base-url" type="text" value="http://localhost:4000" style="width:260px;" placeholder="http://localhost:4000">
+    <button onclick="setDefaultBase()">Use current origin</button>
+  </div>
+  <p>Все запросы идут на <code>POST /api</code> относительно указанного base URL. Cookie <code>sid</code> сохраняется автоматически. WebSocket логируется ниже.</p>
+
+  <div class="grid">
+    <div class="card" id="card-register">
+      <h2>auth.register</h2>
+      <label>username (string)</label>
+      <input id="reg-username" type="text" placeholder="user">
+      <label>password (string)</label>
+      <input id="reg-password" type="password" placeholder="password">
+      <button onclick="submitForm('auth','register',{ username: val('reg-username'), password: val('reg-password') }, 'out-register')">Send</button>
+      <pre id="out-register"></pre>
+    </div>
+
+    <div class="card" id="card-login">
+      <h2>auth.login</h2>
+      <label>username (string)</label>
+      <input id="login-username" type="text" placeholder="user">
+      <label>password (string)</label>
+      <input id="login-password" type="password" placeholder="password">
+      <button onclick="submitForm('auth','login',{ username: val('login-username'), password: val('login-password') }, 'out-login')">Send</button>
+      <pre id="out-login"></pre>
+    </div>
+
+    <div class="card" id="card-logout">
+      <h2>auth.logout</h2>
+      <button onclick="submitForm('auth','logout',{},'out-logout')">Send</button>
+      <pre id="out-logout"></pre>
+    </div>
+
+    <div class="card" id="card-logout-all">
+      <h2>auth.logoutAll</h2>
+      <button onclick="submitForm('auth','logoutAll',{},'out-logout-all')">Send</button>
+      <pre id="out-logout-all"></pre>
+    </div>
+
+    <div class="card" id="card-me">
+      <h2>users.me</h2>
+      <button onclick="submitForm('users','me',{},'out-me')">Send</button>
+      <pre id="out-me"></pre>
+    </div>
+
+    <div class="card" id="card-list">
+      <h2>users.list</h2>
+      <button onclick="submitForm('users','list',{},'out-list')">Send</button>
+      <pre id="out-list"></pre>
+    </div>
+
+    <div class="card" id="card-update-profile">
+      <h2>users.updateProfile</h2>
+      <label>image (file, optional)</label>
+      <input id="upd-icon" type="file" accept="image/*">
+      <label>status (string, optional)</label>
+      <input id="upd-status" type="text" placeholder="online/away/offline">
+      <button onclick="sendUpdateProfile()">Send</button>
+      <pre id="out-update"></pre>
+    </div>
+
+    <div class="card" id="card-mutes">
+      <h2>users.replaceMuted</h2>
+      <label>mutedUsernames (JSON array of strings)</label>
+      <input id="mutes" type="text" placeholder="['Alex']">
+      <button onclick="sendReplaceMuted()">Send</button>
+      <pre id="out-mutes"></pre>
+    </div>
+
+    <div class="card" id="card-fetch">
+      <h2>messages.fetch</h2>
+      <label>since (ISOString, optional)</label>
+      <input id="fetch-since" type="text" placeholder="2025-11-07T13:00:00Z">
+      <button onclick="submitForm('messages','fetch',filterEmpty({ since: val('fetch-since') }),'out-fetch')">Send</button>
+      <pre id="out-fetch"></pre>
+    </div>
+
+    <div class="card" id="card-send">
+      <h2>messages.send</h2>
+      <label>content (string)</label>
+      <textarea id="send-content" placeholder="Hello"></textarea>
+      <button onclick="submitForm('messages','send',{ content: val('send-content') },'out-send')">Send</button>
+      <pre id="out-send"></pre>
+    </div>
+
+    <div class="card" id="card-ws">
+      <h2>WebSocket log (/ws)</h2>
+      <button onclick="connectWS()">Connect</button>
+      <pre id="out-ws"></pre>
+    </div>
+
+    <div class="card" id="card-ping">
+      <h2>ping</h2>
+      <p>GET /ping</p>
+      <button onclick="ping()">Send</button>
+      <pre id="out-ping"></pre>
+    </div>
+  </div>
+
+  <script>
+    const val = (id) => document.getElementById(id).value;
+    const filterEmpty = (obj) => Object.fromEntries(Object.entries(obj).filter(([,v]) => v !== "" && v !== undefined));
+    const logResponse = (id, data) => document.getElementById(id).textContent = JSON.stringify(data, null, 2);
+
+    const baseInput = () => document.getElementById("base-url");
+    function getBaseUrl() {
+        const raw = baseInput().value.trim().replace(/\/+$/, "");
+        return raw || window.location.origin;
+    }
+    function setDefaultBase() {
+        baseInput().value = window.location.origin;
+    }
+    // init base url with default if empty
+    if (!baseInput().value) {
+        baseInput().value = "http://localhost:4000";
+    }
+
+    function parseJsonArrayField(id, key, expectStrings=false) {
+        const raw = val(id).trim();
+        if (!raw) return {};
+        let parsed;
+        try {
+            parsed = JSON.parse(raw);
+        } catch (e) {
+            throw new Error(`Invalid JSON in ${id}: ${e.message}`);
+        }
+        if (!Array.isArray(parsed)) {
+            throw new Error(`Field ${key} must be a JSON array`);
+        }
+        if (expectStrings) {
+            if (parsed.some(x => typeof x !== "string")) {
+                throw new Error(`Field ${key} must be an array of strings`);
+            }
+        }
+        return { [key]: parsed };
+    }
+
+    function sendReplaceMuted() {
+        try {
+            const payload = parseJsonArrayField('mutes', 'mutedUsernames', true);
+            submitForm('users', 'replaceMuted', payload, 'out-mutes');
+        } catch (e) {
+            logResponse('out-mutes', { error: e.message });
+        }
+    }
+
+    async function sendUpdateProfile() {
+        const fileInput = document.getElementById("upd-icon");
+        const file = fileInput.files && fileInput.files[0];
+        let imageB64 = "";
+        if (file) {
+            imageB64 = await readFileAsDataURL(file);
+        }
+        const payload = filterEmpty({
+            imageB64,
+            status: val("upd-status")
+        });
+        submitForm('users', 'updateProfile', payload, 'out-update');
+    }
+
+    function readFileAsDataURL(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(new Error("Failed to read file"));
+            reader.readAsDataURL(file);
+        });
+    }
+
+    async function submitForm(actor, action, payload, outId) {
+        try {
+            const res = await fetch(getBaseUrl() + "/api", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ actor, action, payload: payload || {} })
+            });
+            const text = await res.text();
+            let parsed;
+            try {
+                parsed = text ? JSON.parse(text) : {};
+            } catch (e) {
+                parsed = {
+                    status: "error",
+                    payload: {
+                        message: `Non-JSON response (status ${res.status})`,
+                        body: text.slice(0, 300)
+                    }
+                };
+            }
+            logResponse(outId, parsed);
+        } catch (e) {
+            logResponse(outId, { error: e.message });
+        }
+    }
+
+    async function ping() {
+        try {
+            const res = await fetch(getBaseUrl() + "/ping", { credentials: "include" });
+            const text = await res.text();
+            let parsed;
+            try {
+                parsed = text ? JSON.parse(text) : {};
+            } catch (e) {
+                parsed = { status: res.ok ? "success" : "error", payload: { message: text.slice(0, 300) } };
+            }
+            logResponse("out-ping", parsed);
+        } catch (e) {
+            logResponse("out-ping", { error: e.message });
+        }
+    }
+
+    let ws;
+    function connectWS() {
+        if (ws && ws.readyState === WebSocket.OPEN) return;
+        const base = getBaseUrl();
+        const url = new URL(base);
+        url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
+        url.pathname = "/ws";
+        ws = new WebSocket(url.toString());
+        const out = document.getElementById("out-ws");
+        ws.onopen = () => out.textContent += "WS connected\n";
+        ws.onmessage = (ev) => out.textContent += ev.data + "\n";
+        ws.onerror = (ev) => out.textContent += "WS error\n";
+        ws.onclose = () => out.textContent += "WS closed\n";
+    }
+  </script>
+</body>
+</html>
