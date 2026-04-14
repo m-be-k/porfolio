@@ -101,7 +101,7 @@ export class UsersActor {
             }
         }
         let newIconPath = null;
-        if (imageB64.startsWith("data:image")) {
+        if (imageB64 && imageB64.startsWith("data:image")) {
             try {
                 newIconPath = await this.saveAvatar(imageB64, s.user_id);
             } catch (e) {

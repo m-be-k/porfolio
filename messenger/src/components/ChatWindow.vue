@@ -1,12 +1,26 @@
 <script setup>
-
+import {sendRequest} from '../helpers/network.js';
 import {useRouter} from 'vue-router';
+import {ref} from "vue";
 
 const router = useRouter();
+const errorMessage = ref('');
 
 const onLogout = () => {
-  router.push('/auth');
+  sendRequest(
+      'auth',
+      'logout',
+      {},
+      (data) => {
+        router.push('/auth');
+        console.log('разлогинен!',data)
+      },
+      (message) => {
+        errorMessage.value = message;
+      }
+  )
 };
+
 
 </script>
 <template>
