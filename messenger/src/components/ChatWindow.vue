@@ -1,19 +1,61 @@
 <script setup>
 import {sendRequest} from '../helpers/network.js';
 import {useRouter} from 'vue-router';
-import {ref} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
+import {useUserStore} from "@/store/userStore.js";
+import {User} from "@/classes/User.js";
+import {ForeignUser} from "@/classes/ForeignUser.js";
 
 const router = useRouter();
 const errorMessage = ref('');
 
+const currentUser = useUserStore().currentUser;
+const usersList = ref([]);
+
+onBeforeMount(() => {
+
+  // sendRequest(
+  //     'users',
+  //     'me',
+  //     {},
+  //     (data) => {
+  //       console.log('Данные профиля', data);
+  //       currentUser.value = new User(data.id, data.username, data.iconUrl, data.status);
+  //     },
+  //     (message) => {
+  //       errorMessage.value = message;
+  //
+  //       // router.push({ name: 'auth' });
+  //     }
+  // );
+
+  sendRequest(
+      'users',
+      'list',
+      {},
+      (data) => {
+        console.log('Список пользователей', data.users);
+        usersList.value = data.users.map(user => new ForeignUser(
+            user.id,
+            user.username,
+            user.iconUrl,
+            user.status,
+            user.createdAt,
+            user.updatedAt));
+      },
+      (message) => {
+        errorMessage.value = message;
+      }
+  );
+});
 const onLogout = () => {
   sendRequest(
       'auth',
       'logout',
       {},
       (data) => {
-        router.push('/auth');
-        console.log('разлогинен!',data)
+        router.push({ name: 'auth' });
+        console.log('разлогинен!', data)
       },
       (message) => {
         errorMessage.value = message;
@@ -24,8 +66,8 @@ const onLogout = () => {
 
 </script>
 <template>
-  <div class="container">
 
+  <div class="container">
     <div class="menu">
       <div class="meDiv">
         <div class="me">
@@ -33,16 +75,16 @@ const onLogout = () => {
             <img src="../../public/images/iconmonstr-user-circle-thin.svg" alt='my avatar'>
           </div>
           <div class="accInfo">
-            <div class="accName">Madi</div>
+            <div class="accName">{{ currentUser.username }}</div>
           </div>
 
         </div>
 
         <div class="status">
-          <select>
-            <option>В сети</option>
-            <option>Отошел</option>
-            <option>Невидимый</option>
+          <select v-model="currentUser.status">
+            <option value="online">В сети</option>
+            <option value="away">Отошел</option>
+            <option value="invisible">Невидимый</option>
           </select>
         </div>
         <div class="exit">
@@ -51,11 +93,14 @@ const onLogout = () => {
       </div>
 
       <div class="profileChat">
-        <div class="accProfile">
-          <div class="ava"><img src="../../public/images/iconmonstr-user-circle-thin.svg"></div>
+        <div
+            v-for="(user, key) in usersList"
+            :key="key"
+            class="accProfile">
+          <div class="ava"><img :src="user.iconUrl"></div>
           <div class="accInfo">
-            <div class="accName">IVAN</div>
-            <div class="accStatus">Status</div>
+            <div class="accName">{{ user.username }}</div>
+            <div class="accStatus">{{ user.status }}</div>
           </div>
           <button class="block-btn">block</button>
         </div>

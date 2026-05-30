@@ -17,6 +17,7 @@ export function sendRequest(actor, action, payload = {},onSuccess, onError) {
         headers: {
             "Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify({
             "actor": actor,
             "action": action,

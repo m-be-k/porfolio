@@ -50,9 +50,9 @@ CREATE TABLE IF NOT EXISTS sessions (
 -- Seed data that mirrors the current localStorage mock
 INSERT INTO users (username, password_hash, password_salt, nickname, icon_url, status)
 VALUES
-    ('Ansar', '51a24732198482a157a0fd19ee43229f2ac79340c0d2ddadff3666cd93730132', '634d95bc25949303d4388e595fff52f8', 'Ansar', '/images/free-user-icon-3296-thumb.png', 'online'),
-    ('Denis', '5f2f433bc4f47311b610c9c1d4cb4e5e2ae24032fcb43edba57a12ad11c6c7f0', 'eaaf3a930a4d381d0f0507eb9d0069cd', 'Denis', '/images/free-user-icon-3296-thumb.png', 'away'),
-    ('Alex', '192414d02636bd4bdab6a3e543350379640cb534b2c54c5284e6726aa06651ca', '101fa1847edfa0032ae8a04b5a102a7d', 'Alex', '/images/free-user-icon-3296-thumb.png', 'offline');
+    ('Ansar', '51a24732198482a157a0fd19ee43229f2ac79340c0d2ddadff3666cd93730132', '634d95bc25949303d4388e595fff52f8', 'Ansar', '/images/iconmonstr-user-circle-thin.svg', 'online'),
+    ('Denis', '5f2f433bc4f47311b610c9c1d4cb4e5e2ae24032fcb43edba57a12ad11c6c7f0', 'eaaf3a930a4d381d0f0507eb9d0069cd', 'Denis', '/images/iconmonstr-user-circle-thin.svg', 'away'),
+    ('Alex', '192414d02636bd4bdab6a3e543350379640cb534b2c54c5284e6726aa06651ca', '101fa1847edfa0032ae8a04b5a102a7d', 'Alex', '/images/iconmonstr-user-circle-thin.svg', 'offline');
 
 -- Ansar mutes Alex by default
 INSERT INTO muted_users (user_id, muted_user_id)

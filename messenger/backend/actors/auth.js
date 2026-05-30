@@ -55,7 +55,7 @@ export class AuthActor {
         const salt = crypto.randomBytes(16).toString("hex");
         const hash = this.#hashPassword(salt, password);
         // avatar ставится позже (updateProfile), пока дефолт
-        const icon = "/images/free-user-icon-3296-thumb.png";
+        const icon = "/images/iconmonstr-user-circle-thin.svg";
         const status = "online";
         const info = this.stmtInsertUser.run(username, hash, salt, username, icon, status);
         const sid = this.createSession(info.lastInsertRowid);
