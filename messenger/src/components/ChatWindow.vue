@@ -1,16 +1,23 @@
 <script setup>
 import {sendRequest} from '../helpers/network.js';
 import {useRouter} from 'vue-router';
-import {onBeforeMount, onMounted, ref} from "vue";
+import {onBeforeMount, onMounted, ref, watch} from "vue";
 import {useUserStore} from "@/store/userStore.js";
 import {User} from "@/classes/User.js";
 import {ForeignUser} from "@/classes/ForeignUser.js";
+import {storeToRefs} from "pinia";
 
 const router = useRouter();
 const errorMessage = ref('');
 
-const currentUser = useUserStore().currentUser;
+// const {currentUser} = storeToRefs(useUserStore());
+
+const currentUserStore = useUserStore();
+const refSafeCurrentUserStore = storeToRefs(currentUserStore);
+const currentUser = refSafeCurrentUserStore.currentUser;
+
 const usersList = ref([]);
+
 
 onBeforeMount(() => {
 
@@ -35,14 +42,22 @@ onBeforeMount(() => {
       {},
       (data) => {
         console.log('Список пользователей', data.users);
-        usersList.value = data.users.map(user => new ForeignUser(
-            user.id,
-            user.username,
-            user.iconUrl,
-            user.status,
-            user.createdAt,
-            user.updatedAt));
+
+
+        usersList.value = data.users.map(user => {
+              if (user.username !== currentUser.value.username) {
+               return new ForeignUser(
+                    user.id,
+                    user.username,
+                    user.iconUrl,
+                    user.status,
+                    user.createdAt,
+                    user.updatedAt)
+              }
+            }
+        ).filter((user, _id, arr)=> user !== undefined);
       },
+
       (message) => {
         errorMessage.value = message;
       }
@@ -54,7 +69,7 @@ const onLogout = () => {
       'logout',
       {},
       (data) => {
-        router.push({ name: 'auth' });
+        router.push({name: 'auth'});
         console.log('разлогинен!', data)
       },
       (message) => {
@@ -62,6 +77,51 @@ const onLogout = () => {
       }
   )
 };
+
+const toBase64 = file => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject
+  });
+};
+// функция для отправки файлов
+
+// загрузить аватарку
+const loadFiles = async (eventObject) => {
+  const fileInput = eventObject.target;
+  const file = fileInput.files[0];
+  const base64Img = await toBase64(file);
+
+
+  sendRequest(
+      "users",
+      "updateProfile",
+      {imageB64: base64Img},
+      () => {
+// обновить аватарку.
+        currentUser.value.iconUrl = base64Img;
+      });
+  //
+  //
+  // fileInput.onchange = async function(){
+  //   const file = fileInput.files[0];
+  //   const base64Img = await toBase64(file);
+  //   const image = document.getElementById("image");
+  //   image.src = base64Img;
+  //   console.log(base64Img);
+  // }
+
+}
+
+watch(() => currentUser.value.status, ()=>{
+  sendRequest(
+      "users",
+      "updateProfile",
+      {status: currentUser.value.status}
+  )
+});
 
 
 </script>
@@ -72,10 +132,11 @@ const onLogout = () => {
       <div class="meDiv">
         <div class="me">
           <div class="ava">
-            <img src="../../public/images/iconmonstr-user-circle-thin.svg" alt='my avatar'>
+            <img :src="currentUser.iconUrl" alt='my avatar'>
           </div>
           <div class="accInfo">
             <div class="accName">{{ currentUser.username }}</div>
+            <input type="file" alt="загрузка Аватарки" @change="loadFiles">
           </div>
 
         </div>
@@ -84,7 +145,7 @@ const onLogout = () => {
           <select v-model="currentUser.status">
             <option value="online">В сети</option>
             <option value="away">Отошел</option>
-            <option value="invisible">Невидимый</option>
+            <option value="offline">Оффлайн</option>
           </select>
         </div>
         <div class="exit">
@@ -324,5 +385,11 @@ const onLogout = () => {
 
 img {
   display: block;
+}
+
+.ava img {
+  border-radius: 100%;
+  width: 35px;
+  height: 35px;
 }
 </style>
